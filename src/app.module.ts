@@ -9,11 +9,30 @@ import { PolicyCarrierModule } from './policy-carrier/policy-carrier.module';
 import { PolicyCategoryModule } from './policy-category/policy-category.module';
 import { MessageModule } from './message/message.module';
 import { AccountModule } from './account/account.module';
-import { PolicyCatrgoryController } from './policy-catrgory/policy-catrgory.controller';
+import { MongooseModule } from '@nestjs/mongoose';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ImportModule } from './import/import.module';
+import { MonitoringModule } from './monitoring/monitoring.module';
 
 @Module({
-  imports: [SwaggerModule, UserModule, AgentModule, PolicyModule, PolicyCarrierModule, PolicyCategoryModule, MessageModule, AccountModule],
-  controllers: [AppController, PolicyCatrgoryController],
+  imports: [
+    ScheduleModule.forRoot(),
+    SwaggerModule,
+    UserModule,
+    AgentModule,
+    PolicyModule,
+    PolicyCarrierModule,
+    PolicyCategoryModule,
+    MessageModule,
+    AccountModule,
+    MongooseModule.forRoot(
+      process.env.MONGO_URI ||
+        'mongodb://root:kalilinux@localhost:27017/crm?authSource=admin',
+    ),
+    ImportModule,
+    MonitoringModule,
+  ],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
